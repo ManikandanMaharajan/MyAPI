@@ -22,7 +22,7 @@ jobs:
             Remove-Item $destination\* -Recurse -Force
           }
           Copy-Item -Path "./publish/*" -Destination $destination -Recurse -Force
-        shell: pwsh
+        shell: powershell
 
       - name: 🔄 Restart IIS Site (optional)
         run: |
