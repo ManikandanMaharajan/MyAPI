@@ -15,6 +15,18 @@ jobs:
       - name: 🚀 Publish .NET App
         run: dotnet publish -c Release -o ./publish
 
+      - name: Deploy to IIS with app pool restart
+        shell: powershell
+        run: |
+          Import-Module WebAdministration
+          $appPool = "MyAPI"
+          $destination = "C:\inetpub\wwwroot\MyApi"
+
+          Stop-WebAppPool -Name $appPool
+          Remove-Item "$destination\*" -Recurse -Force -ErrorAction SilentlyContinue
+          Copy-Item -Path ".\publish\*" -Destination $destination -Recurse -Force
+          Start-WebAppPool -Name $appPool
+
       - name: 📁 Deploy to IIS
         run: |
           $destination = "C:\inetpub\wwwroot\MyApi"
