@@ -41,5 +41,5 @@ jobs:
       - name: 🔄 Restart IIS Site (optional)
         run: |
           Import-Module WebAdministration
-          Restart-WebAppPool -Name "MyApiAppPool"  # use your actual app pool name
+          Restart-WebAppPool -Name "MyAPI"  # use your actual app pool name
         shell: powershell
