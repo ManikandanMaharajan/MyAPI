@@ -23,6 +23,8 @@ jobs:
           $destination = "C:\inetpub\wwwroot\MyApi"
 
           Stop-WebAppPool -Name $appPool
+          Start-Sleep -Seconds 5
+          
           Remove-Item "$destination\*" -Recurse -Force -ErrorAction SilentlyContinue
           Copy-Item -Path ".\publish\*" -Destination $destination -Recurse -Force
           Start-WebAppPool -Name $appPool
