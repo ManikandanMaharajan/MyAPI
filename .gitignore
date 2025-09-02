@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/MyApp/CopilotIndices/17.13.449.12402
+/.vs/MyApp/FileContentIndex/da1d576d-5cc2-41e9-9a22-7ab458081a3c.vsidx
+/.vs/MyApp/FileContentIndex/550e7cb5-3cf9-4eda-921c-c79636fd5700.vsidx
+/obj/Debug/net8.0/MyApp.AssemblyInfo.cs
+/obj/Debug/net8.0/MyApp.AssemblyInfoInputs.cache
+/.vs/MyApp/FileContentIndex
