@@ -1,0 +1,45 @@
+name: Deploy to Local IIS
+
+on:
+  push:
+    branches: [main]  # or master
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # uses your local GitHub runner
+
+    steps:
+      - name: 🧱 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🚀 Publish .NET App
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Deploy to IIS with app pool restart
+        shell: powershell
+        run: |
+          Import-Module WebAdministration
+          $appPool = "MyAPI"
+          $destination = "C:\inetpub\wwwroot\MyApi"
+
+          Stop-WebAppPool -Name $appPool
+          Start-Sleep -Seconds 5
+          
+          Remove-Item "$destination\*" -Recurse -Force -ErrorAction SilentlyContinue
+          Copy-Item -Path ".\publish\*" -Destination $destination -Recurse -Force
+          Start-WebAppPool -Name $appPool
+
+      - name: 📁 Deploy to IIS
+        run: |
+          $destination = "C:\inetpub\wwwroot\MyApi"
+          if (Test-Path $destination) {
+            Remove-Item $destination\* -Recurse -Force
+          }
+          Copy-Item -Path "./publish/*" -Destination $destination -Recurse -Force
+        shell: powershell
+
+      - name: 🔄 Restart IIS Site (optional)
+        run: |
+          Import-Module WebAdministration
+          Restart-WebAppPool -Name "MyAPI"  # use your actual app pool name
+        shell: powershell
