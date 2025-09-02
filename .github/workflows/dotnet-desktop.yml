@@ -1,0 +1,36 @@
+name: Deploy to Local IIS
+
+on:
+  push:
+    branches: [main]  # or master
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # uses your local GitHub runner
+
+    steps:
+      - name: 🧱 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 🚀 Publish .NET App
+        run: dotnet publish -c Release -o ./publish
+
+      - name: 📁 Deploy to IIS
+        run: |
+          $destination = "C:\inetpub\wwwroot\MyApi"
+          if (Test-Path $destination) {
+            Remove-Item $destination\* -Recurse -Force
+          }
+          Copy-Item -Path "./publish/*" -Destination $destination -Recurse -Force
+        shell: pwsh
+
+      - name: 🔄 Restart IIS Site (optional)
+        run: |
+          Import-Module WebAdministration
+          Restart-WebAppPool -Name "MyApiAppPool"  # use your actual app pool name
+        shell: powershell
